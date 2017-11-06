@@ -1,0 +1,56 @@
+package common;
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.UUID;
+
+/**
+ * IReceiver defines a receiver in a chat room, which corresponds to a user (More accurately, a remote user's chat room) in the remote. 
+ * Similar to IUser, IReceiver is NOT transmitted to anyone. ONLY the STUB of this Remote object is ever transmitted.
+ */
+public interface IReceiver extends Remote {
+	
+	/**
+	 * Receive a data packet, process the data and return a status
+	 * @param data the received data packet
+	 * @return execution result data packet.
+	 * @throws RemoteException if a network error occurs
+	 * 
+	 */
+	public <T> DataPacketChatRoom<T> receive(DataPacketChatRoom<T> data) throws RemoteException;
+
+	/**
+	 * Get the user stub corresponding to the IReceiver interface
+	 * @return a user stub
+	 * @throws RemoteException if a network error occurs
+	 */
+	public IUser getUserStub() throws RemoteException;
+	
+	
+	/**
+	 * Get a command for a specific type of data packet from remote user
+	 * @param id the class type of the data packet
+	 * @return a command for specific the class type
+	 * @throws RemoteException if a network error occurs 
+	 */
+	public DataPacketAlgoCmd<?> getCmd(Class<?> id) throws RemoteException;
+	
+	/**
+	 * Get the UUID of this receiver.
+	 * @return the UUID of this receiver.
+	 * @throws RemoteException if a network error occurs.
+	 */
+	public UUID getUUID() throws RemoteException;
+	
+//	/*******************************
+//	 * Removed from the final API
+//	 *******************************/
+//	/**
+//	 * A simply print method used in the development process for easy debug
+//	 * Should be removed from the actual API
+//	 * @param s the String to print
+//	 * @throws RemoteException if a network error occurs
+//	 */
+//	public void print(String s) throws RemoteException;
+	
+}

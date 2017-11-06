@@ -1,0 +1,9 @@
+package common;
+
+import provided.datapacket.ADataPacket;
+
+public interface IVoidLambdaDP {
+
+	public void apply(ADataPacket data);
+	
+}

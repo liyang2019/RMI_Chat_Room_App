@@ -1,0 +1,54 @@
+package common;
+
+import java.awt.Container;
+
+import javax.swing.ImageIcon;
+
+/**
+ * This adapter is for the externally-sourced commands to  interact with the local model
+ */
+public interface ICmd2ModelAdapter {
+	
+	/**
+	 * Append some message to the model, allowing the model to process the message by itself.
+	 * Typically the model just appends to the view.
+	 * @param text The message
+	 */
+	public void appendMsg(String text);
+	
+	/**
+	 * Add image to the model.
+	 * @param img is the image to add to the model.
+	 */
+	public void displayImage(ImageIcon img);
+	
+	/**
+	 * Get a container from the model's view, giving the command more flexibility to interact with the local view. 
+	 * @return A container for the command to interact with the local view
+	 */
+	public Container getContainer();
+	
+//	/**
+//	 * Add a user in the local view's user list 
+//	 * @param userStub the user to add
+//	 */
+//	public void addUser(IUser userStub);
+	
+	/**
+	 * Add a receiver in the local view'r receiver list
+	 * @param receiverStub the receiver  to add
+	 */
+	public void addReceiver(IReceiver receiverStub);
+	
+//	/**
+//	 * Remove a user in the local view's user list
+//	 * @param userStub the user to remove
+//	 */
+//	public void removeUser(IUser userStub);
+	
+	/**
+	 * Remove a receiver in the local view's receiver list
+	 * @param receiverStub the receiver to remove
+	 */
+	public void removeReceiver(IReceiver receiverStub);
+}
