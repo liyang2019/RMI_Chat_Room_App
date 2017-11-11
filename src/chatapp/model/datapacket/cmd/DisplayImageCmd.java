@@ -20,13 +20,13 @@ public class DisplayImageCmd extends DataPacketAlgoCmd<ImageIcon>{
 	
 	private static final long serialVersionUID = -4390262620406962086L;
 	/**
-	 * Command to chat room mode adapter.
-	 */
-	/**
 	 * ImageIcon max height;
 	 */
 	private final int IMAGE_ICON_MAXHEIGHT = 150;
 	
+	/**
+	 * Command to chat room mode adapter.
+	 */
 	private transient ICmd2ModelAdapter cmd2ModelAdapter;
 	
 	/**

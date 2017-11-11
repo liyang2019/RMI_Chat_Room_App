@@ -51,19 +51,20 @@ public class MainModel {
 	/**
 	 * Start the server. Create a user, export to user stub, bind the user stub to the register.
 	 * @param userName The user name.
-	 * @param serverName The server name used to bind the user remote object to registry. 
+	 * @param userPort The port for the user.
 	 */
-	public void startServer(String userName, String serverName) {
+	public void startServer(String userName, String userPort) {
 		try {
 			currentUser = new User(userName, _mainViewAdapter);
-			int boundPort = PortManager.Singleton.getAvailPort();
+//			int boundPort = PortManager.Singleton.getAvailPort();
+			int boundPort = Integer.parseInt(userPort);
 			currentUserStub = (ICustomUser) UnicastRemoteObject.exportObject(currentUser, boundPort);
 			currentUserStub = new ProxyCustomUser(currentUserStub, currentUser.getName(), currentUser.getUUID()); // after a user object is created, immediately export to stub, and convert to proxy. 
 			System.out.println("using port: " + boundPort + " for user: " + currentUserStub);
 //			localRegistry.rebind(IUser.BOUND_NAME + boundPort, currentUserStub);
-			localRegistry.rebind(serverName, currentUserStub);
+			localRegistry.rebind(userName, currentUserStub);
 //			_mainViewAdapter.appendInfo("User bound to " + IUser.BOUND_NAME + boundPort + " resigter on port " + boundPort + " \n");
-			_mainViewAdapter.appendInfo("User bound to name: " + serverName + ", on port: " + boundPort + " \n");
+			_mainViewAdapter.appendInfo("User bound to name: " + userName + ", on port: " + boundPort + " \n");
 		} catch (Exception e) {
 			System.err.println("Failed to created a user stub and bind to registry \n");
 			e.printStackTrace();
@@ -84,11 +85,6 @@ public class MainModel {
 				remoteRegistry = localRegistry;
 			}
 			_mainViewAdapter.appendInfo("Found registry : " + remoteRegistry + "\n");
-			
-//			IUser remoteUser = (IUser) remoteRegistry.lookup(IUser.BOUND_NAME);
-//			users.add(new ProxyUser(remoteUser));
-//			_mainViewAdapter.appendInfo("Found remote user stub: " + remoteUser + " on ip: " + ipAddress + "\n");
-//			System.out.println("Found remote user stub: " + remoteUser + " on ip: " + ipAddress + "\n");
 			
 			users = new ArrayList<>();
 			for (String name : remoteRegistry.list()) {
@@ -120,8 +116,8 @@ public class MainModel {
 	}
 
 	/**
-	 * Request a list of chat rooms created by host.
-	 * @param user is a selected user.
+	 * Request chat rooms list a user created or joined.
+	 * @param user The user.
 	 */
 	public void requestChatRooms(IUser user) {
 		try {
@@ -142,8 +138,9 @@ public class MainModel {
 	/**
 	 * Create a Chat Room, then let the current user join this chat room.
 	 * @param chatRoomName The name of the chat room.
+	 * @param receiverPort The port for the receiver.
 	 */
-	public void makeChatRoom(String chatRoomName) {
+	public void makeChatRoom(String chatRoomName, String receiverPort) {
 		if (currentUserStub == null) {
 			_mainViewAdapter.appendInfo("Need to log in first.. \n");
 			System.out.println("Need to log in first..");
@@ -151,15 +148,16 @@ public class MainModel {
 		}
 		IChatRoom chatRoom = new ChatRoom(chatRoomName, currentUserStub.toString());
 		_mainViewAdapter.appendInfo("Successfully made a chat room: " + chatRoom + "\n");
-		joinChatRoom(chatRoom);
+		joinChatRoom(chatRoom, receiverPort);
 	}
 	
 	/**
 	 * Given a chat room, let the current join the chat room. 
 	 * Create a chat room mini MVC using this chat room.
 	 * @param chatRoom is the chat room to join.
+	 * @param receiverPort The port for the receiver.
 	 */
-	public void joinChatRoom(IChatRoom chatRoom) {
+	public void joinChatRoom(IChatRoom chatRoom, String receiverPort) {
 		if (chatRoom == null) {
 			System.out.println("no chat room selected");
 			return;
@@ -167,7 +165,7 @@ public class MainModel {
 		try {
 			// note here use currentUser not currentUserStub, which is crucial..
 			if (currentUser.joinChatRoom(chatRoom)) {
-				chatRoomMVCAdapters.add(_mainViewAdapter.createChatRoomMVC(currentUserStub, chatRoom));
+				chatRoomMVCAdapters.add(_mainViewAdapter.createChatRoomMVC(currentUserStub, chatRoom, receiverPort));
 				_mainViewAdapter.appendInfo("Successfully joined the chat room: " + chatRoom + "\n");
 			} else {
 				_mainViewAdapter.selectChatRoom(chatRoom);

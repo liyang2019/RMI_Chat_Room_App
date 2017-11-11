@@ -13,9 +13,6 @@ import common.IReceiver;
  */
 public class DisplayTextCmd extends DataPacketAlgoCmd<String> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4146905191178168531L;
 	
 	/**

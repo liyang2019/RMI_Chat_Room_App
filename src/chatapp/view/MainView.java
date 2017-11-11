@@ -48,7 +48,7 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 	private JTextField tfChatRoomName = new JTextField("Earth");;
 	
 	private final JPanel panel_top = new JPanel();
-	private final JLabel lblUsername = new JLabel("Username:");
+	private final JLabel lblUsername = new JLabel("User name:");
 	private final JPanel pnlConnectToIP = new JPanel();
 	private final JButton btnLogIn = new JButton("Log In");
 	private final JPanel pnlConnectedUsers = new JPanel();
@@ -69,17 +69,26 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 	private final JScrollPane scrollPane = new JScrollPane();
 	private final JTextArea taInfo = new JTextArea();
 	private final JPanel pnlLogIn = new JPanel();
-	private final JTextField tfServerName = new JTextField("USER");
-	private final JLabel lblServername = new JLabel("Servername:");
+	private final JTextField tfUserPort = new JTextField("2100");
+	private final JLabel lblUserPort = new JLabel("User port:");
 	private final JPanel pnlConnect = new JPanel();
+	private final JLabel lblChatRoomName = new JLabel("Room name:");
+	private final JLabel lblReceiverPort = new JLabel("Room port:");
+	private final JTextField tfReceiverPort = new JTextField();
+	private final JLabel lblReceiverPortJoin = new JLabel("Room port:");
+	private final JTextField tfReceiverPortJoin = new JTextField();
 
 	/**
 	 * Create the frame.
 	 * @param _view2ModelAdapter the view to model adapter.
 	 */
 	public MainView(IMainView2MainModelAdapter<UserObj, ChatRoomObj> _view2ModelAdapter) {
-		tfServerName.setToolTipText("input the server name to bind the user to registry");
-		tfServerName.setColumns(10);
+		tfReceiverPortJoin.setText("2102");
+		tfReceiverPortJoin.setColumns(10);
+		tfReceiverPort.setText("2101");
+		tfReceiverPort.setColumns(10);
+		tfUserPort.setToolTipText("input the server name to bind the user to registry");
+		tfUserPort.setColumns(10);
 		this._view2ModelAdapter = _view2ModelAdapter;
 		initGUI();
 	}
@@ -104,27 +113,33 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 		tfUserName.setToolTipText("input user name");
 		tfUserName.setColumns(10);
 		
-		pnlLogIn.add(lblServername);
+		pnlLogIn.add(lblUserPort);
 		
-		pnlLogIn.add(tfServerName);
+		pnlLogIn.add(tfUserPort);
 		pnlLogIn.add(btnLogIn);
 		btnLogIn.setToolTipText("log in to start the user instance");
 		btnLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				_view2ModelAdapter.startServer(tfUserName.getText(), tfServerName.getText());
+				_view2ModelAdapter.startServer(tfUserName.getText(), tfUserPort.getText());
 			}
 		});
 		pnlMakeChatRoom.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Make New Chat Room", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel_top.add(pnlMakeChatRoom);
-		pnlMakeChatRoom.setLayout(new GridLayout(2, 0, 0, 0));
+		pnlMakeChatRoom.setLayout(new GridLayout(0, 1));
+		
+		pnlMakeChatRoom.add(lblChatRoomName);
 		pnlMakeChatRoom.add(tfChatRoomName);
 		tfChatRoomName.setColumns(12);
 		btnMakeIt.setToolTipText("press to make a new chat room");
 		btnMakeIt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				_view2ModelAdapter.makeChatRoom(tfChatRoomName.getText());
+				_view2ModelAdapter.makeChatRoom(tfChatRoomName.getText(), tfReceiverPort.getText());
 			}
 		});
+		
+		pnlMakeChatRoom.add(lblReceiverPort);
+		
+		pnlMakeChatRoom.add(tfReceiverPort);
 		pnlMakeChatRoom.add(btnMakeIt);
 		
 		panel_top.add(pnlConnect, new GridLayout(0, 1, 0, 0));
@@ -157,23 +172,27 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 		});
 		pnlConnectedUsers.add(btnRequest);
 		pnlChooseRoom.setToolTipText("choose chat room panel");
-		
-		pnlChooseRoom.setPreferredSize(new Dimension(150, 80));// hardCoded sizing
-		pnlChooseRoom.setMaximumSize(new Dimension(250, 80));  // hardCoded sizing
-		pnlChooseRoom.setMinimumSize(new Dimension(150, 80));  // hardCoded sizing
+
+		pnlChooseRoom.setPreferredSize(new Dimension(150, 130));// hardCoded sizing
+		pnlConnectedUsers.setMaximumSize(new Dimension(250, 130));  // hardCoded sizing
+		pnlChooseRoom.setMinimumSize(new Dimension(150, 130));  // hardCoded sizing
 		pnlChooseRoom.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Choose a Room", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
 		panel_top.add(pnlChooseRoom);
-		pnlChooseRoom.setLayout(new GridLayout(0, 1, 0, 0));
+		pnlChooseRoom.setLayout(new GridLayout(0, 1));
 		cbChatRooms.setToolTipText("the chat rooms the selected user has joined will listed here after request");
 		
 		pnlChooseRoom.add(cbChatRooms);
 		btnJoin.setToolTipText("press to join a chat room");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				_view2ModelAdapter.joinChatRoom(cbChatRooms.getItemAt(cbChatRooms.getSelectedIndex()));
+				_view2ModelAdapter.joinChatRoom(cbChatRooms.getItemAt(cbChatRooms.getSelectedIndex()), tfReceiverPortJoin.getText());
 			}
 		});
+		
+		pnlChooseRoom.add(lblReceiverPortJoin);
+		
+		pnlChooseRoom.add(tfReceiverPortJoin);
 		
 		pnlChooseRoom.add(btnJoin);
 		panel_top.add(panel_4);

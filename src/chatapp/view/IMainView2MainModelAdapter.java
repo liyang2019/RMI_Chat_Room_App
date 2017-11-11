@@ -10,15 +10,16 @@ public interface IMainView2MainModelAdapter<UserObj, ChatRoomObj> {
 	/**
 	 * Start the server.
 	 * @param userName The user name.
-	 * @param serverName The server name used to bind the user remote object to registry.
+	 * @param userPort The port for the user.
 	 */
-	void startServer(String userName, String serverName);
+	void startServer(String userName, String userPort);
 
 	/**
 	 * Make a new chat room.
 	 * @param chatRoomName The name of the new chat room.
+	 * @param receiverPort The port for the receiver.
 	 */
-	void makeChatRoom(String chatRoomName);
+	void makeChatRoom(String chatRoomName, String receiverPort);
 
 	/**
 	 * connect to an ip address.
@@ -33,8 +34,8 @@ public interface IMainView2MainModelAdapter<UserObj, ChatRoomObj> {
 	void inviteUser(UserObj user);
 
 	/**
-	 * Request chat rooms list the host created or joined.
-	 * @param user a host how created chat rooms.
+	 * Request chat rooms list a user created or joined.
+	 * @param user The user.
 	 */
 	void requestChatRoomList(UserObj user);
 
@@ -46,6 +47,7 @@ public interface IMainView2MainModelAdapter<UserObj, ChatRoomObj> {
 	/**
 	 * Join a chat room.
 	 * @param chatRoom the chat room object to join.
+	 * @param receiverPort The port for the receiver.
 	 */
-	void joinChatRoom(ChatRoomObj chatRoom);
+	void joinChatRoom(ChatRoomObj chatRoom, String receiverPort);
 }

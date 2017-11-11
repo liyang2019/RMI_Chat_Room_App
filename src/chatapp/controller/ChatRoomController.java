@@ -11,7 +11,6 @@ import chatapp.model.ICRModel2CRViewAdapter;
 import chatapp.model.ICRModel2MainModelAdapter;
 import chatapp.model.ICmd2CRModelViewAdapter;
 import chatapp.model.MainModel;
-import chatapp.model.PortManager;
 import chatapp.model.object.receiver.ProxyReceiver;
 import chatapp.model.object.receiver.Receiver;
 import chatapp.view.ChatRoomView;
@@ -36,8 +35,9 @@ public class ChatRoomController {
 	 * @param chatRoom The chat room object of this chat room.
 	 * @param model The main chat room model. 
 	 * @param view is the main view;
+	 * @param receiverPort The port for the receiver.
 	 */
-	public ChatRoomController(IUser currentUserStub, IChatRoom chatRoom, MainModel model, MainView<IUser, IChatRoom> view) {
+	public ChatRoomController(IUser currentUserStub, IChatRoom chatRoom, MainModel model, MainView<IUser, IChatRoom> view, String receiverPort) {
 		
 		System.out.println("create receiver from user: " + currentUserStub);
 		IReceiver receiver = new Receiver(currentUserStub, new ICmd2CRModelViewAdapter() {
@@ -71,7 +71,8 @@ public class ChatRoomController {
 		});
 		
 		// when a user join a chat room, the user create a IReceiver object, and export to stub.
-		int boundPort = PortManager.Singleton.getAvailPort();
+//		int boundPort = PortManager.Singleton.getAvailPort();
+		int boundPort = Integer.parseInt(receiverPort);
 		IReceiver receiverStub = null;
 		try {
 			receiverStub = (IReceiver) UnicastRemoteObject.exportObject(receiver, boundPort);
@@ -83,7 +84,7 @@ public class ChatRoomController {
 		}
 		
 		chatRoomView = new ChatRoomView<IUser, IChatRoom>(
-				new ICRView2CRModelAdapter<IChatRoom>() {
+				new ICRView2CRModelAdapter<IUser, IChatRoom>() {
 
 					@Override
 					public void exitChatRoom() {
@@ -109,6 +110,11 @@ public class ChatRoomController {
 					@Override
 					public IChatRoom getChatRoom() {
 						return chatRoomModel.getChatRoom();
+					}
+
+					@Override
+					public void requestChatRoomList(IUser user) {
+						chatRoomModel.requestChatRoomList(user);
 					}
 
 				}, currentUserStub + "|" + chatRoom.toString());
@@ -146,6 +152,11 @@ public class ChatRoomController {
 			@Override
 			public void removeChatRoom(IChatRoom chatRoom) {
 				model.removeChatRoom(chatRoom);
+			}
+
+			@Override
+			public void requestChatRoomList(IUser user) {
+				model.requestChatRooms(user);
 			}
 
 		});

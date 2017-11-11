@@ -6,9 +6,10 @@ import javax.swing.ImageIcon;
 
 /**
  * The chat room mini view to chat room mini model adapter.
+ * @param <UserObj> the user generic object.
  * @param <ChatRoomObj> chat room generic object.
  */
-public interface ICRView2CRModelAdapter<ChatRoomObj> {
+public interface ICRView2CRModelAdapter<UserObj, ChatRoomObj> {
 
 	/**
 	 * Exit this chat room.
@@ -38,5 +39,11 @@ public interface ICRView2CRModelAdapter<ChatRoomObj> {
 	 * @return chat room generic object.
 	 */
 	ChatRoomObj getChatRoom();
+
+	/**
+	 * Request chat rooms list a user created or joined.
+	 * @param user The user.
+	 */
+	void requestChatRoomList(UserObj user);
 	
 }

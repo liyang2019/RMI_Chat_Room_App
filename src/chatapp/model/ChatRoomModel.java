@@ -1,7 +1,9 @@
 package chatapp.model;
 
 import java.io.File;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,13 +88,19 @@ public class ChatRoomModel {
 	
 	/**
 	 * Remove a receiver from this chat room. 
-	 * The implementation should remove the receiver in the local chat room and then 
-	 * inform others in the chat room.
+	 * The implementation should remove the receiver in the local chat room, unexport from RMI server, 
+	 * and inform others in the chat room.
 	 * @param receiverStub the receiver to remove
 	 * @return False if the receiver is actually not in the chat room; True if successfully remove the receiver
 	 */
 	public boolean removeIReceiverStub(IReceiver receiverStub) {
 		chatRoom.sendPacket(new DataPacketChatRoom<IRemoveReceiverType>(IRemoveReceiverType.class, new RemoveReceiverData(receiverStub), this.receiverStub));
+		try {
+			UnicastRemoteObject.unexportObject(receiverStub, false);
+		} catch (NoSuchObjectException e) {
+			System.out.println("failed to unexport the receiver stub to be remove.");
+			e.printStackTrace();
+		}
 		return chatRoom.removeIReceiverStubLocally(receiverStub);
 	}
 
@@ -171,5 +179,13 @@ public class ChatRoomModel {
 	 */
 	public IChatRoom getChatRoom() {
 		return chatRoom;
+	}
+
+	/**
+	 * Request chat rooms list a user created or joined.
+	 * @param user The user.
+	 */
+	public void requestChatRoomList(IUser user) {
+		_mainModelAdapter.requestChatRoomList(user);
 	}
 }

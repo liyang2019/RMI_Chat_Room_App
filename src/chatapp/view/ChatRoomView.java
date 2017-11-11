@@ -45,7 +45,7 @@ public class ChatRoomView<UserObj, ChatRoomObj> extends JPanel {
 	 * Chat room view to chat room model adapter.
 	 * 
 	 */
-	private ICRView2CRModelAdapter<ChatRoomObj> _modelAdapter;
+	private ICRView2CRModelAdapter<UserObj, ChatRoomObj> _modelAdapter;
 	private String chatRoomName;
 	
 	private final JTabbedPane tabbedPaneUpdateComp = new JTabbedPane(JTabbedPane.TOP);
@@ -62,12 +62,13 @@ public class ChatRoomView<UserObj, ChatRoomObj> extends JPanel {
 	private final JList<UserObj> userList = new JList<UserObj>();
 	private final JScrollPane spChatRoom = new JScrollPane();
 	private final JTextPane tpChatRoom = new JTextPane();
+	private final JButton btnRequest = new JButton("Request");
 	
 	/**
 	 * @param _modelAdapter view to model adapter.
 	 * @param chatRoomName the name of the chat room.
 	 */
-	public ChatRoomView(ICRView2CRModelAdapter<ChatRoomObj> _modelAdapter, String chatRoomName) {
+	public ChatRoomView(ICRView2CRModelAdapter<UserObj, ChatRoomObj> _modelAdapter, String chatRoomName) {
 		this._modelAdapter = _modelAdapter;
 		this.chatRoomName = chatRoomName;
 		initGUI();
@@ -85,6 +86,7 @@ public class ChatRoomView<UserObj, ChatRoomObj> extends JPanel {
 		tabbedPaneUpdateComp.addTab("chat room", spChatRoom);
 		
 		spChatRoom.setViewportView(tpChatRoom);
+		tpChatRoom.setEditable(false);
 		add(pnlChatRoomUserList, BorderLayout.WEST);
 		pnlChatRoomUserList.setLayout(new BorderLayout(0, 0));
 		btnExistRoom.addActionListener(new ActionListener() {
@@ -98,8 +100,19 @@ public class ChatRoomView<UserObj, ChatRoomObj> extends JPanel {
 		spUsers.setToolTipText("Users in this chat room");
 		
 		pnlChatRoomUserList.add(spUsers, BorderLayout.CENTER);
+		userList.setToolTipText("request chat rooms of a selected users");
 		
 		spUsers.setViewportView(userList);
+		btnRequest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserObj user = userList.getSelectedValue();
+				if (user != null) {
+					_modelAdapter.requestChatRoomList(userList.getSelectedValue());
+				}
+			}
+		});
+		
+		spUsers.setColumnHeaderView(btnRequest);
 		splitPnlInput.setToolTipText("input text, select files and emojis");
 		
 		add(splitPnlInput, BorderLayout.SOUTH);
@@ -242,6 +255,7 @@ public class ChatRoomView<UserObj, ChatRoomObj> extends JPanel {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 			_modelAdapter.sendFile(file);
+			appendMessage("", "You sent the file: " + file);
 		} else {
 			System.out.println("Cancelled");
 		}

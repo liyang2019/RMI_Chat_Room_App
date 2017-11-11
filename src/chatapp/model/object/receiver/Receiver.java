@@ -1,5 +1,6 @@
 package chatapp.model.object.receiver;
 
+import java.io.File;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import chatapp.model.ICmd2CRModelViewAdapter;
 import chatapp.model.datapacket.algo.DataPacketChatRoomAlgo;
 import chatapp.model.datapacket.cmd.DisplayImageCmd;
 import chatapp.model.datapacket.cmd.DisplayTextCmd;
+import chatapp.model.datapacket.cmd.SaveFileCmd;
 import chatapp.model.datapacket.data.InstallCmdData;
 import chatapp.model.datapacket.data.RequestCmdData;
 import common.DataPacketAlgoCmd;
@@ -189,6 +191,7 @@ public class Receiver implements IReceiver, Serializable {
 		});
 		algo.setCmd(ImageIcon.class, new DisplayImageCmd(cmd2CRModelViewAdapter));
 		algo.setCmd(String.class, new DisplayTextCmd(cmd2CRModelViewAdapter));
+		algo.setCmd(File.class, new SaveFileCmd(cmd2CRModelViewAdapter));
 	}
 
 	@Override

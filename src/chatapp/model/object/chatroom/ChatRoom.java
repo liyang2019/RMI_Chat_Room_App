@@ -65,8 +65,8 @@ public class ChatRoom implements ICustomChatRoom {
 
 		IReceiver sender = data.getSender();
 		// create a new thread to let the receiver to receive.
-		(new Thread() {
-			public void run() {
+//		(new Thread() {
+//			public void run() {
 				for (IReceiver rcvr : receivers) {
 					// don not send to self
 					if (!sender.equals(rcvr)) {
@@ -79,8 +79,8 @@ public class ChatRoom implements ICustomChatRoom {
 						}
 					}
 				}
-			}
-		}).start(); // start the new thread
+//			}
+//		}).start(); // start the new thread
 	}
 	
 	

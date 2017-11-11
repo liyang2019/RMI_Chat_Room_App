@@ -33,13 +33,13 @@ public class MainController {
 		view = new MainView<>(new IMainView2MainModelAdapter<IUser, IChatRoom>() {
 
 			@Override
-			public void startServer(String userName, String serverName) {
-				model.startServer(userName, serverName);
+			public void startServer(String userName, String userPort) {
+				model.startServer(userName, userPort);
 			}
 
 			@Override
-			public void makeChatRoom(String chatRoomName) {
-				model.makeChatRoom(chatRoomName);
+			public void makeChatRoom(String chatRoomName, String receiverPort) {
+				model.makeChatRoom(chatRoomName, receiverPort);
 			}
 
 			@Override
@@ -63,8 +63,8 @@ public class MainController {
 			}
 
 			@Override
-			public void joinChatRoom(IChatRoom chatRoom) {
-				model.joinChatRoom(chatRoom);
+			public void joinChatRoom(IChatRoom chatRoom, String receiverPort) {
+				model.joinChatRoom(chatRoom, receiverPort);
 			}
 			
 		});
@@ -87,8 +87,8 @@ public class MainController {
 			}
 
 			@Override
-			public IMainModel2CRMVCAdapter createChatRoomMVC(IUser currentUserStub, IChatRoom chatRoom) {
-				ChatRoomController chatRoomController = new ChatRoomController(currentUserStub, chatRoom, model, view);
+			public IMainModel2CRMVCAdapter createChatRoomMVC(IUser currentUserStub, IChatRoom chatRoom, String receiverPort) {
+				ChatRoomController chatRoomController = new ChatRoomController(currentUserStub, chatRoom, model, view, receiverPort);
 				chatRoomControllerMap.put(chatRoom, chatRoomController);
 				chatRoomController.start();
 				return new IMainModel2CRMVCAdapter() {

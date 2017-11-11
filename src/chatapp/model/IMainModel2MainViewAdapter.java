@@ -34,9 +34,10 @@ public interface IMainModel2MainViewAdapter {
 	 * @param currentUser the current user stub used to create the chat room mini MVC.
 	 * @param chatRoom the chat room object used to create the chat room mini MVC.
 	 * @param chatRoomName the name of the chat room.
+	 * @param receiverPort The port for the receiver.
 	 * @return The main model to chat room mini MVC adapter.
 	 */
-	IMainModel2CRMVCAdapter createChatRoomMVC(IUser currentUser, IChatRoom chatRoom);
+	IMainModel2CRMVCAdapter createChatRoomMVC(IUser currentUser, IChatRoom chatRoom, String receiverPort);
 	
 	/**
 	 * Remove a chat room miniMVC. 
