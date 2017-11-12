@@ -57,7 +57,7 @@ public class ChatRoomView<UserObj, ChatRoomObj> extends JPanel {
 	private final JButton btnSendText = new JButton("Send Text");
 	private final JButton btnSendFile = new JButton("Send File");
 	private final JButton btnSendEmoji = new JButton("Send Emoji");
-	private final JButton btnExistRoom = new JButton("Exist Room");
+	private final JButton btnExistRoom = new JButton("Exit Room");
 	private final JScrollPane spUsers = new JScrollPane();
 	private final JList<UserObj> userList = new JList<UserObj>();
 	private final JScrollPane spChatRoom = new JScrollPane();

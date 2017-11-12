@@ -22,9 +22,11 @@ import common.DataPacketAlgoCmd;
 import common.DataPacketChatRoom;
 import common.IAddReceiverType;
 import common.ICmd2ModelAdapter;
+import common.IExceptionStatusType;
 import common.IFailureStatusType;
 import common.IInstallCmdType;
 import common.IReceiver;
+import common.IRejectionStatusType;
 import common.IRemoveReceiverType;
 import common.IRequestCmdType;
 import common.IUser;
@@ -189,6 +191,86 @@ public class Receiver implements IReceiver, Serializable {
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {}
 		});
+		// exception status command.
+		algo.setCmd(IExceptionStatusType.class, new DataPacketAlgoCmd<IExceptionStatusType>() {
+			
+			private static final long serialVersionUID = -8251873133456388224L;
+			private transient ICmd2ModelAdapter cmd2ModelAdpt;
+
+			@Override
+			public String apply(Class<?> index, DataPacketChatRoom<IExceptionStatusType> host, String... params) {
+				String failureInfo = host.getData().getFailureInfo();
+				IReceiver sender = host.getSender();
+				String senderName = "";
+				try {
+					senderName = sender.getUserStub().getName();
+				} catch (RemoteException e) {
+					System.out.println("failed to get sender name, sender: " + sender);
+					e.printStackTrace();
+				}
+				cmd2ModelAdpt.appendMsg("data packet exception with info: " + failureInfo, senderName);
+				return failureInfo;
+			}
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					this.cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+		});
+		// rejection status command.
+		algo.setCmd(IRejectionStatusType.class, new DataPacketAlgoCmd<IRejectionStatusType>() {
+
+			private static final long serialVersionUID = 1928526090101061225L;
+			private transient ICmd2ModelAdapter cmd2ModelAdpt;
+
+			@Override
+			public String apply(Class<?> index, DataPacketChatRoom<IRejectionStatusType> host, String... params) {
+				String failureInfo = host.getData().getFailureInfo();
+				IReceiver sender = host.getSender();
+				String senderName = "";
+				try {
+					senderName = sender.getUserStub().getName();
+				} catch (RemoteException e) {
+					System.out.println("failed to get sender name, sender: " + sender);
+					e.printStackTrace();
+				}
+				cmd2ModelAdpt.appendMsg("data packet rejected with info: " + failureInfo, senderName);
+				return failureInfo;
+			}
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				this.cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+		});
+		// failure status command
+		// rejection status command.
+		algo.setCmd(IFailureStatusType.class, new DataPacketAlgoCmd<IFailureStatusType>() {
+
+			private static final long serialVersionUID = -2093682637800309729L;
+			private transient ICmd2ModelAdapter cmd2ModelAdpt;
+
+			@Override
+			public String apply(Class<?> index, DataPacketChatRoom<IFailureStatusType> host, String... params) {
+				String failureInfo = host.getData().getFailureInfo();
+				IReceiver sender = host.getSender();
+				String senderName = "";
+				try {
+					senderName = sender.getUserStub().getName();
+				} catch (RemoteException e) {
+					System.out.println("failed to get sender name, sender: " + sender);
+					e.printStackTrace();
+				}
+				cmd2ModelAdpt.appendMsg("data packet failure with info: " + failureInfo, senderName);
+				return failureInfo;
+			}
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				this.cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+		});
+		// image, string and file type
 		algo.setCmd(ImageIcon.class, new DisplayImageCmd(cmd2CRModelViewAdapter));
 		algo.setCmd(String.class, new DisplayTextCmd(cmd2CRModelViewAdapter));
 		algo.setCmd(File.class, new SaveFileCmd(cmd2CRModelViewAdapter));

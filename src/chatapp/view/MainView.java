@@ -62,7 +62,7 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 	private final JTabbedPane panel_tab = new JTabbedPane(JTabbedPane.TOP);
 	private final JPanel pnlInfo = new JPanel();
 	
-	private final JPanel pnlChooseRoom = new JPanel();
+	private final JPanel pnlJoinRoom = new JPanel();
 	private final JComboBox<ChatRoomObj> cbChatRooms = new JComboBox<>();
 	private final JButton btnJoin = new JButton("Join");
 	
@@ -77,6 +77,7 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 	private final JTextField tfReceiverPort = new JTextField();
 	private final JLabel lblReceiverPortJoin = new JLabel("Room port:");
 	private final JTextField tfReceiverPortJoin = new JTextField();
+	private final JLabel lblChatRoomList = new JLabel("Chatroom list");
 
 	/**
 	 * Create the frame.
@@ -162,7 +163,7 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 		cbUsers.setToolTipText("connected users will listed here");
 		pnlConnectedUsers.add(cbUsers);
 		pnlConnectedUsers.setPreferredSize(new Dimension(150, 80));// hardCoded sizing
-		pnlConnectedUsers.setMaximumSize(new Dimension(250, 80));  // hardCoded sizing
+		pnlConnectedUsers.setMaximumSize(new Dimension(150, 80));  // hardCoded sizing
 		pnlConnectedUsers.setMinimumSize(new Dimension(150, 80));
 		btnRequest.setToolTipText("request to list the chat rooms a selected user has joined");
 		btnRequest.addActionListener(new ActionListener() {
@@ -171,18 +172,19 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 			}
 		});
 		pnlConnectedUsers.add(btnRequest);
-		pnlChooseRoom.setToolTipText("choose chat room panel");
-
-		pnlChooseRoom.setPreferredSize(new Dimension(150, 130));// hardCoded sizing
-		pnlConnectedUsers.setMaximumSize(new Dimension(250, 130));  // hardCoded sizing
-		pnlChooseRoom.setMinimumSize(new Dimension(150, 130));  // hardCoded sizing
-		pnlChooseRoom.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Choose a Room", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlJoinRoom.setToolTipText("join chat room panel");
 		
-		panel_top.add(pnlChooseRoom);
-		pnlChooseRoom.setLayout(new GridLayout(0, 1));
+		pnlJoinRoom.setMaximumSize(new Dimension(150, 200));  // hardCoded sizing
+		pnlJoinRoom.setMinimumSize(new Dimension(150, 160));  // hardCoded sizing
+		pnlJoinRoom.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Join a Room", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		
+		panel_top.add(pnlJoinRoom);
+		pnlJoinRoom.setLayout(new GridLayout(0, 1));
+		
+		pnlJoinRoom.add(lblChatRoomList);
 		cbChatRooms.setToolTipText("the chat rooms the selected user has joined will listed here after request");
 		
-		pnlChooseRoom.add(cbChatRooms);
+		pnlJoinRoom.add(cbChatRooms);
 		btnJoin.setToolTipText("press to join a chat room");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -190,11 +192,11 @@ public class MainView<UserObj, ChatRoomObj> extends JFrame {
 			}
 		});
 		
-		pnlChooseRoom.add(lblReceiverPortJoin);
+		pnlJoinRoom.add(lblReceiverPortJoin);
 		
-		pnlChooseRoom.add(tfReceiverPortJoin);
+		pnlJoinRoom.add(tfReceiverPortJoin);
 		
-		pnlChooseRoom.add(btnJoin);
+		pnlJoinRoom.add(btnJoin);
 		panel_top.add(panel_4);
 		panel_4.setLayout(new GridLayout(0, 1, 0, 0));
 		btnExit.setToolTipText("exit the chat room app");
