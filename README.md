@@ -1,5 +1,6 @@
 # RMI_Chat_Room_App
 
+
 This is a chat room application using java RMI, with a decentralized architecture.
 Users can create a chat room, join other people's chat room.
 After doing this, the user will create a chat room view on the local machine.
